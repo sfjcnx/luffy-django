@@ -1,0 +1,70 @@
+redis={
+    luffy_pyment_1_1:{
+        'cid' : 1
+        'price':99.99,
+        "policy_id":str(default_policy),
+        'valid_period':60,
+        'valid_period_display':2个月,
+        'name':'xiaosan',
+        'img':'1.jpg',
+        "coupon":{  1:{coupon_type:0,'coupon_type_display':'立减券','money_equivalent_value':'50元'},
+                    2:{coupon_type:1,'coupon_type_display':'满减券','money_equivalent_value':'50元','minimum_consume':"100元"}
+            },
+        'default_coupon':1,
+    },
+    luffy_pyment_1_2:{
+        'cid' : 2
+        'price':299.99,
+        'valid_period':60,
+        'valid_period_display':2个月,
+        'name':'xiaosan',
+        'img':'2.jpg',
+        "coupon":{  1:{coupon_type:0,'coupon_type_display':'立减券','money_equivalent_value':'50元'},
+                    2:{coupon_type:1,'coupon_type_display':'满减券','money_equivalent_value':'50元','minimum_consume':"100元"}
+            },
+        'default_coupon':2,
+    },
+
+    luffy_payment_coupon_1:{
+         'coupon':{
+                  3:{coupon_type:2,'coupon_type_display':'折扣券','off_percent':79}
+         },
+         'default_coupon':3,
+
+    }
+
+}
+
+
+
+
+       redis_payment_key = settings.PAYMENT_KEY % (request.auth.user_id, '*')
+        for key in self.conn.scan_iter(redis_payment_key):
+            data = self.conn.hgetall(key)
+            for k,val in data.items():
+                kk = k.decode('utf-8')
+                if kk == "cid":
+                    course_obj= models.Course.objects.get(id=val.decode('utf-8'))
+                    policy_query = course_obj.price_policy.all()
+                    status=course_obj.status
+                    if status!=0:
+                        raise ObjectDoesNotExist('课程不存在,或已下线')
+                    elif kk == "policy_id":
+                        policy_obj = models.PricePolicy.objects.filter(valid_period=val.decode('utf-8'))
+                        if policy_obj not in policy_query:
+                            raise ObjectDoesNotExist('价格策略不存在,或已下线')
+                    elif kk == "":
+
+
+
+
+
+
+
+
+
+
+
+
+
+
